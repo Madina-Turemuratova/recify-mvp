@@ -1,0 +1,196 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#fff7fa" />
+  <title>Recify — Digital Purchase Tracker</title>
+  <style>
+    :root{--bg:#fff8fb;--paper:#fff;--dark:#4f3045;--text:#604b5a;--muted:#9c8493;--pink:#d75f91;--deep:#bc4779;--line:#f1e1e9;--blush:#fff0f6;--shadow:0 16px 45px rgba(143,74,107,.075)}
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;color:var(--dark);font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:14px;background:radial-gradient(ellipse 47% 33% at 98% -5%,#ffe5ef 0,transparent 100%),var(--bg)}
+    button,input,textarea,select{font:inherit}
+    button{cursor:pointer}
+    button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid #f4a8c7;outline-offset:2px}
+    .app{max-width:1560px;margin:auto;min-height:100vh;display:grid;grid-template-columns:247px minmax(0,1fr)}
+    .sidebar{background:#fff;border-right:1px solid var(--line);padding:34px 20px 25px;display:flex;flex-direction:column;gap:43px;min-height:100vh}
+    .brand{display:flex;align-items:center;gap:11px;padding-left:9px;font-size:27px;letter-spacing:-1.3px;font-weight:850;color:#71435f}
+    .brand-icon{width:41px;height:41px;border-radius:14px;color:white;display:grid;place-items:center;background:linear-gradient(140deg,#f8aecb,#d95e91);box-shadow:0 8px 17px #edb1c8aa}
+    .brand-icon svg{width:23px;height:23px}
+    .nav-title{font-size:10px;font-weight:850;letter-spacing:1.8px;color:#b9a5b1;text-transform:uppercase;padding-left:14px;margin-bottom:12px}
+    .menu{display:grid;gap:7px}
+    .nav-button{display:flex;align-items:center;gap:13px;width:100%;padding:14px 15px;border:0;border-radius:15px;text-align:left;background:transparent;color:#91808d;font-weight:750;transition:.16s}
+    .nav-button svg{width:20px;height:20px;flex-shrink:0}
+    .nav-button:hover,.nav-button.active{background:#ffedf4;color:#be4e7c}
+    .sidebar-bottom{margin-top:auto}
+    .sidebar-note{padding:21px;border:1px solid #f9dce7;background:linear-gradient(130deg,#ffe4ed,#fff4f8);border-radius:21px}
+    .sidebar-note .flower{color:#dc78a1;font-size:29px;margin-bottom:12px}
+    .sidebar-note strong{font-size:14px;display:block;color:#794b66;margin-bottom:8px}
+    .sidebar-note p{margin:0;color:#9b778b;font-size:12px;line-height:1.65}
+    .demo-tag{margin:17px 6px 0;color:#b19ca9;font-size:11px;display:flex;align-items:center;gap:8px}
+    .demo-tag:before{content:"";width:7px;height:7px;background:#e9a2bf;border-radius:50%}
+    .main{min-width:0;padding:39px clamp(23px,4.5vw,64px) 70px}
+    .top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}
+    .eyebrow{margin:0 0 8px;text-transform:uppercase;letter-spacing:2px;color:#c8799d;font-size:10px;font-weight:850}
+    .top h1{margin:0;font-size:27px;letter-spacing:-1px;color:#59394e}
+    .top-tag{border:1px solid #f0dce6;background:#fff;padding:10px 14px;border-radius:100px;color:#9d7990;font-size:11px;font-weight:800;white-space:nowrap}
+    .screen{display:none;animation:arrive .2s ease both}
+    .screen.active{display:block}
+    @keyframes arrive{from{opacity:.55;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+    .hero{border-radius:30px;position:relative;overflow:hidden;min-height:225px;background:linear-gradient(112deg,#ffe2ec 0,#fff0f6 66%,#ffe8f0 100%);border:1px solid #ffdfeb;padding:33px 43px;display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+    .hero:before{content:"";position:absolute;right:-95px;top:-170px;width:350px;height:350px;border-radius:50%;border:2px solid #fff9;box-shadow:0 0 0 50px #ffffff35,0 0 0 103px #ffffff22}
+    .hero-content{position:relative;z-index:1;max-width:600px}
+    .hero-label{display:inline-flex;gap:7px;align-items:center;background:#ffffffbf;border-radius:100px;padding:8px 14px;font-size:10px;font-weight:850;color:#c4618c;letter-spacing:.5px;margin-bottom:16px}
+    .hero h2{font-weight:850;font-size:clamp(28px,3vw,41px);letter-spacing:-1.45px;line-height:1.16;margin:0 0 12px;color:#6b405a}
+    .hero h2 span{color:#d95c8d}
+    .hero p{margin:0 0 20px;color:#9b788b;line-height:1.6;font-size:13px}
+    .hero-art{width:200px;height:190px;flex:0 0 200px;position:relative;margin-right:18px;transform:rotate(-7deg)}
+    .hero-art .circle{position:absolute;width:178px;height:178px;border-radius:47% 53% 54% 46%;background:#f6b1cb;opacity:.56;right:0;top:6px}
+    .hero-art .paper{position:absolute;left:30px;top:0;background:white;width:143px;height:182px;box-shadow:0 15px 32px #b8688e30;border-radius:16px;padding:23px 19px;transform:rotate(12deg)}
+    .paper strong{font-size:14px;letter-spacing:-.2px;color:#d15e8d}
+    .paper .dash{height:7px;border-radius:8px;margin-top:11px;background:#fbd9e6;width:93%}
+    .paper .dash:nth-of-type(2){width:63%;background:#f2e8ec}
+    .paper .dash:nth-of-type(3){width:78%}
+    .paper .dash:nth-of-type(4){width:56%;background:#f2e8ec}
+    .paper .heart{position:absolute;bottom:15px;right:16px;color:#e391b2;font-size:25px}
+    .primary,.secondary{border:0;display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:13px;padding:12px 19px;min-height:45px;font-size:13px;font-weight:800;transition:.15s}
+    .primary{color:white;background:linear-gradient(105deg,#e06b9a,#ca4f82);box-shadow:0 10px 19px #df81a337}
+    .primary:hover{transform:translateY(-2px);filter:brightness(.99)}
+    .secondary{background:#fff;border:1px solid #f2dbe5;color:#c65b87}
+    .secondary:hover{background:#fff3f8}
+    .heading-row{display:flex;justify-content:space-between;align-items:end;gap:15px;margin:0 0 18px}
+    .heading-row h2{font-size:22px;letter-spacing:-.7px;margin:0 0 6px;color:#56394d}
+    .heading-row p{margin:0;color:#a38a99;font-size:12px}
+    .searchbox{margin-bottom:19px;max-width:680px;display:flex;align-items:center;gap:10px;background:#fff;border:1px solid #f1dfe8;border-radius:15px;padding:0 15px;box-shadow:0 4px 12px #bc7c9a06}
+    .searchbox svg{width:21px;height:21px;color:#c88aa8;flex-shrink:0}
+    .searchbox input{width:100%;border:0;outline:0;background:transparent;padding:15px 2px;color:var(--dark);min-width:0}
+    .searchbox input::placeholder{color:#b6a1ae}
+    .cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+    .purchase{width:100%;color:var(--dark);border:1px solid #f1e3ea;background:#fff;border-radius:23px;text-align:left;padding:23px 24px 21px;box-shadow:0 5px 14px #b37a8a08;transition:.16s;min-width:0}
+    .purchase:hover{transform:translateY(-3px);border-color:#ebabc5;box-shadow:var(--shadow)}
+    .card-top{display:flex;justify-content:space-between;align-items:start;margin-bottom:15px}
+    .card-icon{border-radius:17px;width:52px;height:52px;background:#fce6ef;color:#cf6390;display:grid;place-items:center;flex-shrink:0}
+    .card-icon svg{width:26px;height:26px}
+    .card-icon.lilac{background:#f3eaf9;color:#a082b3}
+    .card-icon.sand{background:#fff0e8;color:#cb9776}
+    .arrow{width:30px;height:30px;border-radius:50%;background:#fff4f8;color:#cb82a1;display:grid;place-items:center;font-size:21px}
+    .purchase h3{margin:0 0 6px;font-size:17px;letter-spacing:-.35px;overflow-wrap:anywhere}
+    .store{font-size:12px;color:#9c8795;margin-bottom:15px;overflow-wrap:anywhere}
+    .card-line{height:1px;background:#f5eaf0;margin-bottom:14px}
+    .card-info{display:flex;gap:10px;justify-content:space-between;align-items:center;flex-wrap:wrap;color:#9f8997;font-size:11px}
+    .detail-hint{color:#cc6794;font-weight:850}
+    .empty{grid-column:1/-1;border:1px dashed #ebbbce;background:#fff;border-radius:23px;text-align:center;padding:42px 20px}
+    .empty h3{font-size:17px;margin:0 0 9px}
+    .empty p{color:var(--muted);margin:0}
+    .panel{border-radius:26px;background:#fff;border:1px solid #f1e0e8;overflow:hidden;box-shadow:0 9px 29px #b5768908;max-width:840px}
+    .panel-title{background:linear-gradient(110deg,#ffecf3,#fff8fb);padding:28px 35px;border-bottom:1px solid #f8e6ee}
+    .panel-title h2{font-size:26px;letter-spacing:-.8px;color:#68435c;margin:0 0 9px}
+    .panel-title p{margin:0;color:#9b7e90;font-size:13px;line-height:1.6}
+    .panel-body{padding:31px 35px 35px}
+    .form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+    .field{display:flex;flex-direction:column;gap:9px;min-width:0}
+    .field.full{grid-column:1/-1}
+    label{color:#75576a;font-size:12px;font-weight:800}
+    .req{color:#d75f91}
+    .field input,.field textarea{width:100%;padding:13px 15px;border:1px solid #eddde6;border-radius:13px;min-height:49px;background:#fffbfd;color:#5f4558;outline:0}
+    .field input:focus,.field textarea:focus{border-color:#e79dbe;box-shadow:0 0 0 4px #fff0f6}
+    .field input::placeholder,.field textarea::placeholder{color:#bbaab5}
+    .separator{height:1px;background:#f5e9ef;margin:26px 0}
+    .subheading{font-size:14px;font-weight:850;color:#715165;margin:0 0 18px}
+    .helper{font-size:11px;color:#ad94a2;line-height:1.6}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+    .notice{border-radius:14px;background:#fff0f6;padding:14px 16px;color:#9d7288;font-size:12px;line-height:1.6;margin-top:23px}
+    .back{display:inline-flex;gap:8px;align-items:center;border:0;background:transparent;padding:0;margin:1px 0 18px;color:#c85a88;font-weight:800}
+    .details-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+    .datum{background:#fffbfd;border:1px solid #f4e7ed;border-radius:17px;padding:17px 19px;overflow-wrap:anywhere}
+    .datum span{display:block;color:#a58b9b;font-size:11px;font-weight:800;margin-bottom:11px}
+    .datum strong{font-size:15px;color:#68495d}
+    .datum.full{grid-column:1/-1}
+    .feedback-layout{display:grid;grid-template-columns:minmax(0,790px) minmax(200px,300px);gap:20px;align-items:start}
+    .rating-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 24px}
+    .rating{background:#fffbfd;border:1px solid #f0e0e8;color:#896d7e;border-radius:15px;padding:18px 8px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:9px;font-size:12px;font-weight:800;min-height:99px}
+    .rating .emoji{font-size:27px}
+    .rating:hover,.rating.chosen{color:#bd4e7b;border-color:#e99abb;background:#fff0f6;box-shadow:inset 0 0 0 1px #e99abb}
+    .feedback-note{background:linear-gradient(155deg,#ffeaf3,#fff8fb);border-radius:23px;padding:25px;border:1px solid #f7dfea}
+    .feedback-note .flower{font-size:40px;color:#d57b9f}
+    .feedback-note h3{margin:15px 0 10px;color:#6b455e;font-size:18px;line-height:1.3}
+    .feedback-note p{font-size:12px;line-height:1.8;color:#987a8a;margin:0}
+    .feedback-note .rule{border-top:1px solid #efd5e1;margin-top:20px;padding-top:16px;font-size:11px;color:#ac8b9c;line-height:1.7}
+    .toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,16px);opacity:0;pointer-events:none;background:#674657;color:white;border-radius:15px;z-index:30;padding:13px 21px;box-shadow:0 13px 32px #54334250;transition:.2s;font-size:13px;font-weight:700;text-align:center;max-width:92%}
+    .toast.on{opacity:1;transform:translate(-50%,0)}
+    .bottom-nav{display:none}
+    @media(max-width:1080px){.app{grid-template-columns:215px minmax(0,1fr)}.sidebar{padding:27px 14px}.hero{padding:30px}.hero-art{margin-right:0;flex-basis:175px;transform:scale(.9) rotate(-7deg)}.main{padding:30px 27px 70px}.feedback-layout{grid-template-columns:1fr}.feedback-note{max-width:790px}}
+    @media(max-width:760px){.app{display:block}.sidebar{display:none}.main{padding:22px 18px 103px}.top{margin-bottom:23px}.top h1{font-size:23px}.hero{min-height:0;padding:28px 27px}.hero-art{display:none}.bottom-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:20;background:#fffdfef0;backdrop-filter:blur(16px);border-top:1px solid #f2dfeb;align-items:center;justify-content:space-around;padding:9px 12px calc(9px + env(safe-area-inset-bottom))}.bottom-nav button{border:0;background:transparent;color:#9b8797;padding:8px 12px;border-radius:12px;display:flex;flex-direction:column;gap:4px;align-items:center;font-size:10px;font-weight:800;min-width:80px}.bottom-nav button.active{background:#fff0f6;color:#c95a88}.bottom-nav svg{height:20px;width:20px}}
+    @media(max-width:560px){.main{padding:20px 14px 105px}.top-tag{display:none}.hero{border-radius:23px;padding:29px 23px}.hero h2{font-size:31px}.hero p{font-size:12px}.heading-row h2{font-size:20px}.cards{grid-template-columns:1fr;gap:12px}.purchase{padding:20px}.form-grid,.details-grid{grid-template-columns:1fr}.field.full,.datum.full{grid-column:auto}.panel-title{padding:25px 22px}.panel-body{padding:25px 20px}.rating-row{gap:7px}.rating{font-size:11px;min-height:86px;padding:12px 5px}.rating .emoji{font-size:23px}}
+    @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar" aria-label="Navigation">
+    <div class="brand"><span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Z"/><path d="M9 8h6M9 12h6"/></svg></span>recify<span style="color:#e88aaf">.</span></div>
+    <div><div class="nav-title">Your space</div><nav class="menu" aria-label="Main menu">
+      <button class="nav-button active" type="button" data-nav="archive"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M9 14h6"/></svg>My purchases</button>
+      <button class="nav-button" type="button" data-nav="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v10M7 12h10"/></svg>Add a purchase</button>
+      <button class="nav-button" type="button" data-nav="feedback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M20 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.8-4.5a9 9 0 1 1 15.2-5Z"/></svg>Feedback</button>
+    </nav></div>
+    <div class="sidebar-bottom"><div class="sidebar-note"><div class="flower">✿</div><strong>Keep purchases in one place.</strong><p>Save key details and find them whenever you need them.</p></div><div class="demo-tag">Interactive MVP · demo data</div></div>
+  </aside>
+  <main class="main">
+    <header class="top"><div><p class="eyebrow" id="page-eyebrow">Your purchase archive</p><h1 id="page-title">My purchases</h1></div><span class="top-tag">✿ &nbsp; Recify MVP</span></header>
+    <section class="screen active" id="screen-archive" aria-label="Purchase archive">
+      <div class="hero"><div class="hero-content"><span class="hero-label">♡ &nbsp; Your digital receipt tracker</span><h2>All your purchases,<br><span>one lovely place.</span></h2><p>Save your purchase details and find the information you need, without searching through different folders.</p><button class="primary" type="button" data-nav="add">＋ Add a purchase</button></div><div class="hero-art" aria-hidden="true"><div class="circle"></div><div class="paper"><strong>recify.</strong><div class="dash"></div><div class="dash"></div><div class="dash"></div><div class="dash"></div><span class="heart">♡</span></div></div></div>
+      <div class="heading-row"><div><h2>Saved purchases</h2><p>Search by product or store and open a purchase to see its details.</p></div></div>
+      <label for="search" style="position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)">Search purchases</label>
+      <div class="searchbox"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg><input id="search" placeholder="Search product or store..." autocomplete="off" /></div>
+      <div class="cards" id="purchase-list" aria-live="polite"></div>
+      <p class="helper" style="margin-top:21px">Demonstration only: receipt scanning, live reminders and retailer integrations are not included.</p>
+    </section>
+    <section class="screen" id="screen-add" aria-label="Add purchase"><div class="panel"><div class="panel-title"><p class="eyebrow">Keep it together</p><h2>Add a purchase ♡</h2><p>Enter the key details so you can find this purchase again later.</p></div><form id="purchase-form" class="panel-body">
+      <p class="subheading">Purchase information</p><div class="form-grid">
+        <div class="field"><label for="product">Product name <span class="req">*</span></label><input id="product" name="product" maxlength="100" placeholder="e.g. Wireless headphones" required /></div>
+        <div class="field"><label for="store">Store <span class="req">*</span></label><input id="store" name="store" maxlength="100" placeholder="e.g. Electronics store" required /></div>
+        <div class="field"><label for="date">Purchase date <span class="req">*</span></label><input id="date" name="date" type="date" required /></div>
+      </div><div class="separator"></div><p class="subheading">Additional details <span style="font-size:12px;font-weight:500;color:#b09aaa">(optional)</span></p>
+      <div class="form-grid"><div class="field"><label for="ret">Return deadline</label><input id="ret" name="ret" type="date" /></div><div class="field"><label for="warranty">Warranty end date</label><input id="warranty" name="warranty" type="date" /></div><div class="field full"><label for="receipt">Receipt reference</label><input id="receipt" name="receipt" maxlength="180" placeholder="e.g. Email confirmation or paper receipt location" /><span class="helper">Text reference only. This prototype does not upload or scan receipt images.</span></div></div>
+      <div class="notice">♡ &nbsp; Only the product, store and purchase date are required. Your entries are saved in this browser.</div>
+      <div class="actions"><button type="submit" class="primary">Save purchase &nbsp; →</button><button type="button" class="secondary" data-nav="archive">Cancel</button></div>
+    </form></div></section>
+    <section class="screen" id="screen-detail" aria-label="Purchase details"><button class="back" type="button" data-nav="archive">← &nbsp; Back to purchases</button><div class="panel"><div class="panel-title"><p class="eyebrow">Saved purchase</p><h2 id="detail-name">Purchase details</h2><p id="detail-subtitle"></p></div><div class="panel-body"><p class="subheading">Purchase information</p><div class="details-grid" id="detail-grid"></div><div class="actions"><button class="secondary" type="button" data-nav="archive">← Back to archive</button></div></div></div></section>
+    <section class="screen" id="screen-feedback" aria-label="Feedback"><div class="feedback-layout"><div class="panel"><div class="panel-title"><p class="eyebrow">Your opinion matters</p><h2>Help us improve Recify ♡</h2><p>Tell us whether it was easy to find your purchase.</p></div><form class="panel-body" id="feedback-form"><p class="subheading">Was it easy to find a purchase?</p><div class="rating-row" role="group" aria-label="Ease of finding a purchase"><button class="rating" type="button" data-rating="Yes" aria-pressed="false"><span class="emoji">♡</span>Yes</button><button class="rating" type="button" data-rating="Somewhat" aria-pressed="false"><span class="emoji">◡̈</span>Somewhat</button><button class="rating" type="button" data-rating="No" aria-pressed="false"><span class="emoji">☹</span>No</button></div><div class="field"><label for="comment">What should we improve? <span style="color:#b09aaa;font-weight:500">(optional)</span></label><textarea name="comment" id="comment" rows="5" maxlength="1500" placeholder="Share your thoughts here..."></textarea></div><div class="actions"><button type="submit" class="primary">Save feedback ♡</button></div></form></div><aside class="feedback-note"><div class="flower">✿</div><h3>Thank you for helping us grow.</h3><p>Your opinion helps us understand how useful the searchable purchase archive is.</p><div class="rule">Feedback is stored only in this browser. It is not sent automatically to the project team.</div></aside></div></section>
+  </main>
+</div>
+<nav class="bottom-nav" aria-label="Mobile navigation"><button type="button" data-nav="archive" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M9 14h6"/></svg>Purchases</button><button type="button" data-nav="add"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9.5"/><path d="M12 7v10M7 12h10"/></svg>Add</button><button type="button" data-nav="feedback"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M20 11.5a8.5 8.5 0 0 1-8.5 8.5 9 9 0 0 1-4-.9L3 21l1.8-4.5a9 9 0 1 1 15.2-5Z"/></svg>Feedback</button></nav>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>
+(()=>{
+  'use strict';
+  const purchaseKey='recify-purchases', feedbackKey='recify-feedback';
+  const demo=[
+    {id:'demo-headphones',product:'Wireless headphones',store:'Electronics store',date:'2026-10-02',ret:'2026-11-01',warranty:'2027-10-02',receipt:'Receipt photo saved externally'},
+    {id:'demo-jacket',product:'Winter jacket',store:'Clothing store',date:'2026-10-10',ret:'2026-11-10',warranty:'',receipt:'Email confirmation'}
+  ];
+  const $=id=>document.getElementById(id);
+  const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function load(key,fallback){try{const raw=localStorage.getItem(key);if(raw===null)return fallback;const parsed=JSON.parse(raw);return Array.isArray(parsed)?parsed:fallback}catch{return fallback}}
+  let purchases=load(purchaseKey,demo).filter(p=>p&&typeof p==='object').map((p,i)=>({...p,id:String(p.id||'saved-'+i)}));
+  let rating='';
+  const iconReceipt='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3h14v18l-3-2-4 2-4-2-3 2V3Z"/><path d="M9 9h6M9 13h4"/></svg>';
+  const iconHeadphones='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 13V11a8 8 0 0 1 16 0v2"/><rect x="3" y="12" width="5" height="9" rx="2"/><rect x="16" y="12" width="5" height="9" rx="2"/></svg>';
+  const iconJacket='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m8 3-5 5 3 4 1-2v11h10V10l1 2 3-4-5-5-4 3-4-3Z"/><path d="M12 6v15"/></svg>';
+  const iconFor=p=>{const t=String(p.product||'').toLowerCase();if(/headphone|earbud|laptop|phone|tablet|charger/.test(t))return `<div class="card-icon">${iconHeadphones}</div>`;if(/jacket|dress|shirt|coat|jeans|clothes/.test(t))return `<div class="card-icon lilac">${iconJacket}</div>`;return `<div class="card-icon sand">${iconReceipt}</div>`};
+  const formatDate=s=>{if(!/^\d{4}-\d{2}-\d{2}$/.test(String(s||'')))return 'Not entered';const d=new Date(s+'T12:00:00');return isNaN(d.getTime())?'Not entered':d.toLocaleDateString('en-US',{day:'numeric',month:'short',year:'numeric'})};
+  function render(){const q=$('search').value.trim().toLowerCase();const shown=purchases.map((p,i)=>({...p,index:i})).filter(p=>(String(p.product||'')+' '+String(p.store||'')).toLowerCase().includes(q));$('purchase-list').innerHTML=shown.length?shown.map(p=>`<button class="purchase" type="button" data-index="${p.index}" aria-label="Open details for ${esc(p.product)}"><div class="card-top">${iconFor(p)}<div class="arrow" aria-hidden="true">→</div></div><h3>${esc(p.product)}</h3><div class="store">${esc(p.store)}</div><div class="card-line"></div><div class="card-info"><span>Purchased ${esc(formatDate(p.date))}</span><span class="detail-hint">View details →</span></div></button>`).join(''):`<div class="empty"><h3>${q?'No matching purchases':'No purchases saved yet'}</h3><p>${q?'Try searching by another product or store.':'Add a purchase to start your archive.'}</p></div>`}
+  function navigate(dest){if(!$("screen-"+dest))dest='archive';document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('active',s.id==='screen-'+dest));document.querySelectorAll('[data-nav]').forEach(b=>b.classList.toggle('active',b.dataset.nav===dest));const titles={archive:['Your purchase archive','My purchases'],add:['Record a purchase','Add a purchase'],detail:['Your saved record','Purchase details'],feedback:['Help us improve','Feedback']};$('page-eyebrow').textContent=titles[dest][0];$('page-title').textContent=titles[dest][1];if(dest==='archive')render();window.scrollTo(0,0)}
+  function openDetails(i){const p=purchases[i];if(!p)return;$('detail-name').textContent=p.product;$('detail-subtitle').textContent=p.store;const data=[['Store',p.store],['Purchase date',formatDate(p.date)],['Return deadline',formatDate(p.ret)],['Warranty end date',formatDate(p.warranty)],['Receipt reference',p.receipt||'Not entered']];$('detail-grid').innerHTML=data.map(([label,value],i)=>`<div class="datum ${i===4?'full':''}"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join('');navigate('detail')}
+  let toastTimer;function notify(msg){$('toast').textContent=msg;$('toast').classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('on'),2800)}
+  document.addEventListener('click',e=>{const nav=e.target.closest('[data-nav]');if(nav){navigate(nav.dataset.nav);return}const item=e.target.closest('[data-index]');if(item){openDetails(Number(item.dataset.index));return}const answer=e.target.closest('[data-rating]');if(answer){rating=answer.dataset.rating;document.querySelectorAll('[data-rating]').forEach(b=>{const active=b.dataset.rating===rating;b.classList.toggle('chosen',active);b.setAttribute('aria-pressed',String(active))})}});
+  $('search').addEventListener('input',render);
+  $('purchase-form').addEventListener('submit',e=>{e.preventDefault();const f=e.currentTarget;const p={id:'purchase-'+Date.now(),product:f.elements.product.value.trim(),store:f.elements.store.value.trim(),date:f.elements.date.value,ret:f.elements.ret.value,warranty:f.elements.warranty.value,receipt:f.elements.receipt.value.trim()};if(!p.product||!p.store||!p.date){notify('Please enter product, store and purchase date.');return}const updated=[p,...purchases];try{localStorage.setItem(purchaseKey,JSON.stringify(updated))}catch{notify('This browser could not save the purchase.');return}purchases=updated;f.reset();$('search').value='';navigate('archive');notify('♡ Purchase saved in this browser.')});
+  $('feedback-form').addEventListener('submit',e=>{e.preventDefault();if(!rating){notify('Please select an answer first.');return}const entries=load(feedbackKey,[]);entries.push({ease:rating,comment:$('comment').value.trim()});try{localStorage.setItem(feedbackKey,JSON.stringify(entries))}catch{notify('This browser could not save your feedback.');return}rating='';$('feedback-form').reset();document.querySelectorAll('[data-rating]').forEach(b=>{b.classList.remove('chosen');b.setAttribute('aria-pressed','false')});notify('♡ Feedback saved locally in this browser.')});
+  render();
+})();
+</script>
+</body>
+</html>
